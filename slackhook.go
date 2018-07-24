@@ -75,7 +75,7 @@ func (c *Client) Simple(msg string) error {
 }
 
 // Send a Message.
-func (c *Client) Send(msg *Message) error {
+func (c *Client) Send(msg *Message) *http.Response, error {
 	buf, err := json.Marshal(msg)
 	if err != nil {
 		return err
@@ -89,8 +89,5 @@ func (c *Client) Send(msg *Message) error {
 	// Discard response body to reuse connection
 	io.Copy(ioutil.Discard, resp.Body)
 
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-	return nil
+	return resp, err
 }
